@@ -52,7 +52,7 @@ public class CpeService {
         ).getBody().getTotalResults();
         List<CPE> cpeList = new ArrayList<>();
         long start = System.currentTimeMillis();
-        for (int i = 0; i <= 100000; i+=10000) {
+        for (int i = 0; i < 100000; i+=10000) {
             try {
                 ResponseEntity<ResultSet> response = restTemplate.exchange(
                         uri,
@@ -64,7 +64,6 @@ public class CpeService {
                 ResultSet resultSet = response.getBody();
                 cpeList.addAll(resultSet.getProducts());
                 System.out.println(cpeList.size()+"/"+totalResults+" rows readed");
-                break;
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
                 break;

@@ -1,10 +1,7 @@
 package com.example.nistcpeapi.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,6 +16,7 @@ public class CPE {
     private boolean deprecated;
     private String cpeName;
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID cpeNameId;
     private Timestamp lastModified;
     private Timestamp created;
