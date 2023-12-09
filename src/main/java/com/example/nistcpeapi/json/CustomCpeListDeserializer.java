@@ -49,6 +49,7 @@ public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
             for (JsonNode itemNode : deprecatedByNode) {
                 CPE deprecatedBy = new CPE();
                 deprecatedBy.setCpeName(itemNode.path("cpeName").asText());
+                String deprecatedById = itemNode.path("cpeNameId").asText();
                 deprecatedBy.setCpeNameId(UUID.fromString(itemNode.path("cpeNameId").asText()));
                 deprecatedByList.add(deprecatedBy);
             }

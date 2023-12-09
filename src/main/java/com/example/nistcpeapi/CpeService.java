@@ -9,16 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CpeService {
@@ -64,6 +63,7 @@ public class CpeService {
                 ResultSet resultSet = response.getBody();
                 cpeList.addAll(resultSet.getProducts());
                 System.out.println(cpeList.size()+"/"+totalResults+" rows readed");
+                break;
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
                 break;
@@ -72,5 +72,11 @@ public class CpeService {
         createCpe(cpeList);
         long timeDiff = System.currentTimeMillis()-start;
         System.out.println("Database completed in "+timeDiff/1000+" seconds");
+    }
+
+    public CPE getById(UUID cpeNameId) {
+        UUID lowerCase = UUID.fromString(cpeNameId.toString().toLowerCase());
+        return cpeRepository.findById(lowerCase).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 }

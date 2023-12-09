@@ -1,5 +1,8 @@
 package com.example.nistcpeapi.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,11 +15,11 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class CPE {
     private boolean deprecated;
     private String cpeName;
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID cpeNameId;
     private Timestamp lastModified;
     private Timestamp created;
@@ -30,8 +33,10 @@ public class CPE {
             joinColumns = @JoinColumn(name = "cpe_id"),
             inverseJoinColumns = @JoinColumn(name = "deprecates_id")
     )
+    @JsonIgnoreProperties({"deprecated","lastModified", "created", "titles", "refs", "deprecates", "deprecatedBy"})
     private List<CPE> deprecates;
     @ManyToMany(mappedBy = "deprecates",cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"deprecated","lastModified", "created", "titles", "refs", "deprecates", "deprecatedBy"})
     private List<CPE> deprecatedBy;
 
     @Override
