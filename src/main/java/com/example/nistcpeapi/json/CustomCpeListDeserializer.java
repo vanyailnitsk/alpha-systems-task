@@ -37,16 +37,19 @@ public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
                 cpe.setDeprecatedBy(parseDeprecatedBy(cpeNode));
                 cpe.setDeprecates(parseDeprecates(cpeNode));
                 cpeList.add(cpe);
+                if (cpe.isDeprecated()) {
+                    System.out.println(cpe);
+                }
             }
         }
         return cpeList;
     }
-    private List<CPE.DeprecatedBy> parseDeprecatedBy(JsonNode node) {
-        List<CPE.DeprecatedBy> deprecatedByList = new ArrayList<>();
+    private List<CPE> parseDeprecatedBy(JsonNode node) {
+        List<CPE> deprecatedByList = new ArrayList<>();
         JsonNode deprecatedByNode = node.path("deprecatedBy");
         if (deprecatedByNode.isArray()) {
             for (JsonNode itemNode : deprecatedByNode) {
-                CPE.DeprecatedBy deprecatedBy = new CPE.DeprecatedBy();
+                CPE deprecatedBy = new CPE();
                 deprecatedBy.setCpeName(itemNode.path("cpeName").asText());
                 deprecatedBy.setCpeNameId(itemNode.path("cpeNameId").asText());
                 deprecatedByList.add(deprecatedBy);
@@ -54,14 +57,14 @@ public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
         }
         return deprecatedByList;
     }
-    private List<CPE.Deprecates> parseDeprecates(JsonNode node) {
-        List<CPE.Deprecates> deprecatesList = new ArrayList<>();
+    private List<CPE> parseDeprecates(JsonNode node) {
+        List<CPE> deprecatesList = new ArrayList<>();
         JsonNode deprecatesNode = node.path("deprecates");
         if (deprecatesNode.isArray()) {
             Iterator<JsonNode> elements = deprecatesNode.elements();
             while (elements.hasNext()) {
                 JsonNode deprecatesItemNode = elements.next();
-                CPE.Deprecates deprecates = new CPE.Deprecates();
+                CPE deprecates = new CPE();
                 deprecates.setCpeName(deprecatesItemNode.path("cpeName").asText());
                 deprecates.setCpeNameId(deprecatesItemNode.path("cpeNameId").asText());
                 deprecatesList.add(deprecates);

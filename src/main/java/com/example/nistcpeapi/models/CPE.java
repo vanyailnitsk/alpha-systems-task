@@ -20,8 +20,8 @@ public class CPE {
     private Timestamp created;
     private List<Title> titles;
     private List<Ref> refs;
-    private List<DeprecatedBy> deprecatedBy;
-    private List<Deprecates> deprecates;
+    private List<CPE> deprecatedBy;
+    private List<CPE> deprecates;
 
     @Override
     public String toString() {
@@ -36,35 +36,5 @@ public class CPE {
                 ", deprecatedBy=" + deprecatedBy +
                 ", deprecates=" + deprecates +
                 '}';
-    }
-
-    @Getter
-    @Setter
-    public static class DeprecatedBy {
-        private String cpeName;
-        private String cpeNameId;
-
-        @Override
-        public String toString() {
-            return "DeprecatedBy{" +
-                    "cpeName='" + cpeName + '\'' +
-                    ", cpeNameId='" + cpeNameId + '\'' +
-                    '}';
-        }
-    }
-
-    @Getter
-    @Setter
-    public static class Deprecates {
-        private String cpeName;
-        private String cpeNameId;
-
-        @Override
-        public String toString() {
-            return "Deprecates{" +
-                    "cpeName='" + cpeName + '\'' +
-                    ", cpeNameId='" + cpeNameId + '\'' +
-                    '}';
-        }
     }
 }
