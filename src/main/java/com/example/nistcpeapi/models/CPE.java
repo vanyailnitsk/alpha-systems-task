@@ -35,7 +35,12 @@ public class CPE {
     )
     @JsonIgnoreProperties({"deprecated","lastModified", "created", "titles", "refs", "deprecates", "deprecatedBy"})
     private List<CPE> deprecates;
-    @ManyToMany(mappedBy = "deprecates",cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "cpe_deprecates",
+            joinColumns = @JoinColumn(name = "deprecates_id"),
+            inverseJoinColumns = @JoinColumn(name = "cpe_id")
+    )
     @JsonIgnoreProperties({"deprecated","lastModified", "created", "titles", "refs", "deprecates", "deprecatedBy"})
     private List<CPE> deprecatedBy;
 
