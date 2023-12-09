@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
 
@@ -51,7 +52,7 @@ public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
             for (JsonNode itemNode : deprecatedByNode) {
                 CPE deprecatedBy = new CPE();
                 deprecatedBy.setCpeName(itemNode.path("cpeName").asText());
-                deprecatedBy.setCpeNameId(itemNode.path("cpeNameId").asText());
+                deprecatedBy.setCpeNameId(UUID.fromString(itemNode.path("cpeNameId").asText()));
                 deprecatedByList.add(deprecatedBy);
             }
         }
@@ -66,7 +67,7 @@ public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
                 JsonNode deprecatesItemNode = elements.next();
                 CPE deprecates = new CPE();
                 deprecates.setCpeName(deprecatesItemNode.path("cpeName").asText());
-                deprecates.setCpeNameId(deprecatesItemNode.path("cpeNameId").asText());
+                deprecates.setCpeNameId(UUID.fromString(deprecatesItemNode.path("cpeNameId").asText()));
                 deprecatesList.add(deprecates);
             }
         }

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +16,7 @@ import java.util.List;
 public class CPE {
     private boolean deprecated;
     private String cpeName;
-    private String cpeNameId;
+    private UUID cpeNameId;
     private Timestamp lastModified;
     private Timestamp created;
     private List<Title> titles;
