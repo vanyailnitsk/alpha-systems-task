@@ -30,19 +30,19 @@ public class CPE {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "cpe_deprecates",
-            joinColumns = @JoinColumn(name = "cpe_id"),
-            inverseJoinColumns = @JoinColumn(name = "deprecates_id")
-    )
-    @JsonIgnoreProperties({"deprecated","lastModified", "created", "titles", "refs", "deprecates", "deprecatedBy"})
-    private List<CPE> deprecates;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "cpe_deprecates",
             joinColumns = @JoinColumn(name = "deprecates_id"),
             inverseJoinColumns = @JoinColumn(name = "cpe_id")
     )
     @JsonIgnoreProperties({"deprecated","lastModified", "created", "titles", "refs", "deprecates", "deprecatedBy"})
     private List<CPE> deprecatedBy;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "cpe_deprecates",
+            joinColumns = @JoinColumn(name = "cpe_id"),
+            inverseJoinColumns = @JoinColumn(name = "deprecates_id")
+    )
+    @JsonIgnoreProperties({"deprecated","lastModified", "created", "titles", "refs", "deprecates", "deprecatedBy"})
+    private List<CPE> deprecates;
 
     @Override
     public String toString() {
