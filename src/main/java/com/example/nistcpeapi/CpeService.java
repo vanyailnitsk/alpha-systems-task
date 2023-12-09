@@ -4,6 +4,7 @@ import com.example.nistcpeapi.config.AppConfig;
 import com.example.nistcpeapi.models.CPE;
 import com.example.nistcpeapi.models.Product;
 import com.example.nistcpeapi.models.ResultSet;
+import com.example.nistcpeapi.repositories.CpeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -25,6 +26,18 @@ public class CpeService {
     private String apiKey;
     @Autowired
     private RestTemplate restTemplate;
+    private final CpeRepository cpeRepository;
+
+    @Autowired
+    public CpeService(CpeRepository cpeRepository) {
+        this.cpeRepository = cpeRepository;
+    }
+    public void createCpe(CPE cpe) {
+        cpeRepository.save(cpe);
+    }
+    public void createCpe(List<CPE> cpeList) {
+        cpeRepository.saveAll(cpeList);
+    }
     public void init() throws InterruptedException {
         String uri = "https://services.nvd.nist.gov/rest/json/cpes/2.0?resultsPerPage=10000&startIndex={index}";
         HttpHeaders headers = new HttpHeaders();
@@ -51,13 +64,13 @@ public class CpeService {
                 ResultSet resultSet = response.getBody();
                 cpeList.addAll(resultSet.getProducts());
                 System.out.println(cpeList.size()+"/"+totalResults+" rows readed");
-                //System.out.println(resultSet.getProducts());
                 break;
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
                 break;
             }
         }
+        createCpe(cpeList);
         long timeDiff = System.currentTimeMillis()-start;
         System.out.println("Database completed in "+timeDiff/1000+" seconds");
     }

@@ -1,5 +1,6 @@
 package com.example.nistcpeapi.models;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,16 +14,27 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
+@Entity
 public class CPE {
     private boolean deprecated;
     private String cpeName;
+    @Id
     private UUID cpeNameId;
     private Timestamp lastModified;
     private Timestamp created;
+    @ElementCollection
     private List<Title> titles;
+    @ElementCollection
     private List<Ref> refs;
-    private List<CPE> deprecatedBy;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "cpe_deprecates",
+            joinColumns = @JoinColumn(name = "cpe_id"),
+            inverseJoinColumns = @JoinColumn(name = "deprecates_id")
+    )
     private List<CPE> deprecates;
+    @ManyToMany(mappedBy = "deprecates",cascade = CascadeType.ALL)
+    private List<CPE> deprecatedBy;
 
     @Override
     public String toString() {

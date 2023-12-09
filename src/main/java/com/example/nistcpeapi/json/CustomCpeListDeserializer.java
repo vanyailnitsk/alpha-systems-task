@@ -38,9 +38,6 @@ public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
                 cpe.setDeprecatedBy(parseDeprecatedBy(cpeNode));
                 cpe.setDeprecates(parseDeprecates(cpeNode));
                 cpeList.add(cpe);
-                if (cpe.isDeprecated()) {
-                    System.out.println(cpe);
-                }
             }
         }
         return cpeList;

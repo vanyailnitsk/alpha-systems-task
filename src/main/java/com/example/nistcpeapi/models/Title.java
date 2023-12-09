@@ -1,5 +1,7 @@
 package com.example.nistcpeapi.models;
 
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
 import lombok.*;
 
 @NoArgsConstructor
@@ -7,6 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
+@Embeddable
 public class Title {
     private String title;
     private String lang;
