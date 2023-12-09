@@ -1,5 +1,10 @@
 package com.example.nistcpeapi.models;
 
+import com.example.nistcpeapi.json.CustomCpeListDeserializer;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResultSet {
     private Integer resultsPerPage;
     private Integer startIndex;
@@ -19,5 +25,6 @@ public class ResultSet {
     private String format;
     private String version;
     private Timestamp timestamp;
-    private List<Product> products;
+    @JsonDeserialize(using = CustomCpeListDeserializer.class)
+    private List<CPE> products;
 }
