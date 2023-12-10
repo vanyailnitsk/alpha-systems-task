@@ -197,7 +197,7 @@ curl --location 'http://localhost:8081/api/cpe/list-by-name?names=cpe%3A2.3%3Ao%
 - наименование (частичное совпадение);
 - описание (частичное совпадение);
 ```bash
-curl --location 'http://localhost:8080/api/cpe/search?page=0&size=10&cpeName=linux&description=github'
+curl --location 'http://localhost:8081/api/cpe/search?page=0&size=10&cpeName=linux&description=github'
 ```
 Параметры:
 - page - номер страницы (с 0)
