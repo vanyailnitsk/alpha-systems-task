@@ -3,6 +3,8 @@ package com.example.nistcpeapi.controllers;
 import com.example.nistcpeapi.CpeService;
 import com.example.nistcpeapi.models.CPE;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,5 +41,14 @@ public class CpeController {
         } else {
             return List.of();
         }
+    }
+
+    @GetMapping("/search")
+    public Page<CPE> searchCpesByCpeNameAndDescription(@RequestParam(required = false,defaultValue = "") String cpeName,
+                                                       @RequestParam(required = false,defaultValue = "") String description,
+                                                       @RequestParam int page,
+                                                       @RequestParam int size) {
+        Page<CPE> result = cpeService.getCpesByCpeNameAndDescription(cpeName, description, page, size);
+        return result;
     }
 }

@@ -6,6 +6,8 @@ import com.example.nistcpeapi.repositories.CpeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -84,5 +86,10 @@ public class CpeService {
 
     public List<CPE> getCpeListByNames(List<String> names) {
         return cpeRepository.findAllByCpeNameIn(names);
+    }
+
+    public Page<CPE> getCpesByCpeNameAndDescription(String cpeName, String description, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return cpeRepository.findByCpeNameAndDescription(cpeName, description, pageRequest);
     }
 }

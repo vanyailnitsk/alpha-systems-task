@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -27,4 +28,7 @@ public class ResultSet {
     private Timestamp timestamp;
     @JsonDeserialize(using = CustomCpeListDeserializer.class)
     private List<CPE> products;
+    public ResultSet(Page<CPE> page) {
+
+    }
 }
