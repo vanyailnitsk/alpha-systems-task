@@ -1,4 +1,4 @@
-package com.example.nistcpeapi;
+package com.example.nistcpeapi.service;
 
 import com.example.nistcpeapi.models.CPE;
 import com.example.nistcpeapi.models.ResultSet;
@@ -12,24 +12,23 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Slf4j
 public class CpeService {
     @Value("${api.key}")
     private String apiKey;
-    @Autowired
     private RestTemplate restTemplate;
     private final CpeRepository cpeRepository;
-
     @Autowired
-    public CpeService(CpeRepository cpeRepository) {
+    public CpeService(CpeRepository cpeRepository,RestTemplate restTemplate) {
         this.cpeRepository = cpeRepository;
+        this.restTemplate = restTemplate;
     }
     public void createCpe(CPE cpe) {
         cpeRepository.save(cpe);
@@ -62,7 +61,6 @@ public class CpeService {
                 );
                 ResultSet resultSet = response.getBody();
                 cpeList.addAll(resultSet.getProducts());
-                //createCpe(resultSet.getProducts());
                 System.out.println(cpeList.size()+"/"+totalResults+" rows readed");
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
@@ -72,6 +70,33 @@ public class CpeService {
         createCpe(cpeList);
         long timeDiff = System.currentTimeMillis()-start;
         System.out.println("Database completed in "+timeDiff/1000+" seconds");
+    }
+    public void dailyUpdate() {
+        String uri =
+                "https://services.nvd.nist.gov/rest/json/cpes/2.0/";
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("apiKey", apiKey);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+        Calendar calendar = Calendar.getInstance();
+        Timestamp end = new Timestamp(calendar.getTimeInMillis());
+        calendar.add(Calendar.DAY_OF_YEAR,-1);
+        Timestamp start = new Timestamp(calendar.getTimeInMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+        String formattedStart = sdf.format(new Date(start.getTime()));
+        String formattedEnd = sdf.format(new Date(end.getTime()));
+        String urlTemplate = UriComponentsBuilder.fromHttpUrl(uri)
+                .queryParam("lastModStartDate", formattedStart)
+                .queryParam("lastModEndDate",formattedEnd)
+                .encode()
+                .toUriString();
+        ResultSet resultSet = restTemplate.exchange(
+                urlTemplate,
+                HttpMethod.GET,
+                entity,
+                ResultSet.class
+        ).getBody();
+        cpeRepository.saveAll(resultSet.getProducts());
+        log.info("Database updated successfully! {} rows updated ",resultSet.getTotalResults());
     }
 
     public CPE getById(UUID cpeNameId) {
