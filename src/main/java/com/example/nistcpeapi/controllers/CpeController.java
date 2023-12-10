@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,5 +23,21 @@ public class CpeController {
     @GetMapping("")
     public CPE getById(@RequestParam UUID cpeNameId) {
         return cpeService.getById(cpeNameId);
+    }
+    @GetMapping("/list-by-id")
+    public List<CPE> getCpeListByIds(@RequestParam List<UUID> ids) {
+        if (ids != null && !ids.isEmpty()) {
+            return cpeService.getCpeListByIds(ids);
+        } else {
+            return List.of();
+        }
+    }
+    @GetMapping("/list-by-name")
+    public List<CPE> getCpeListByNames(@RequestParam List<String> names) {
+        if (names != null && !names.isEmpty()) {
+            return cpeService.getCpeListByNames(names);
+        } else {
+            return List.of();
+        }
     }
 }

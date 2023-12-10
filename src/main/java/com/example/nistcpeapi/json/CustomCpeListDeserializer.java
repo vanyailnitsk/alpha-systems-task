@@ -33,7 +33,6 @@ public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
             while (elements.hasNext()) {
                 JsonNode productNode = elements.next();
                 JsonNode cpeNode = productNode.path("cpe");
-
                 CPE cpe = objectMapper.treeToValue(cpeNode, CPE.class);
                 cpe.setDeprecatedBy(parseDeprecatedBy(cpeNode));
                 cpe.setDeprecates(parseDeprecates(cpeNode));
@@ -49,7 +48,6 @@ public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
             for (JsonNode itemNode : deprecatedByNode) {
                 CPE deprecatedBy = new CPE();
                 deprecatedBy.setCpeName(itemNode.path("cpeName").asText());
-                String deprecatedById = itemNode.path("cpeNameId").asText();
                 deprecatedBy.setCpeNameId(UUID.fromString(itemNode.path("cpeNameId").asText()));
                 deprecatedByList.add(deprecatedBy);
             }

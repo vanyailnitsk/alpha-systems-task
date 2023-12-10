@@ -1,14 +1,11 @@
 package com.example.nistcpeapi;
 
-import com.example.nistcpeapi.config.AppConfig;
 import com.example.nistcpeapi.models.CPE;
-import com.example.nistcpeapi.models.Product;
 import com.example.nistcpeapi.models.ResultSet;
 import com.example.nistcpeapi.repositories.CpeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class CpeService {
     @Value("${api.key}")
     private String apiKey;
@@ -37,7 +35,7 @@ public class CpeService {
     public void createCpe(List<CPE> cpeList) {
         cpeRepository.saveAll(cpeList);
     }
-    public void init() throws InterruptedException {
+    public void init() {
         String uri = "https://services.nvd.nist.gov/rest/json/cpes/2.0?resultsPerPage=10000&startIndex={index}";
         HttpHeaders headers = new HttpHeaders();
         headers.set("apiKey", apiKey);
@@ -78,5 +76,13 @@ public class CpeService {
         UUID lowerCase = UUID.fromString(cpeNameId.toString().toLowerCase());
         return cpeRepository.findById(lowerCase).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    public List<CPE> getCpeListByIds(List<UUID> ids) {
+        return cpeRepository.findAllById(ids);
+    }
+
+    public List<CPE> getCpeListByNames(List<String> names) {
+        return cpeRepository.findAllByCpeNameIn(names);
     }
 }
