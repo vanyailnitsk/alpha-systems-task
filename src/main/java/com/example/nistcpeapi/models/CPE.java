@@ -7,8 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,7 +33,7 @@ public class CPE {
             inverseJoinColumns = @JoinColumn(name = "cpe_id")
     )
     @JsonIgnoreProperties({"deprecated","lastModified", "created", "titles", "refs", "deprecates", "deprecatedBy"})
-    private List<CPE> deprecatedBy;
+    private Set<CPE> deprecatedBy = new HashSet<>();
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "cpe_deprecates",
@@ -42,8 +41,7 @@ public class CPE {
             inverseJoinColumns = @JoinColumn(name = "deprecates_id")
     )
     @JsonIgnoreProperties({"deprecated","lastModified", "created", "titles", "refs", "deprecates", "deprecatedBy"})
-    private List<CPE> deprecates;
-
+    private Set<CPE> deprecates = new HashSet<>();
     @Override
     public String toString() {
         return "CPE{" +
@@ -57,5 +55,18 @@ public class CPE {
                 ", deprecatedBy=" + deprecatedBy +
                 ", deprecates=" + deprecates +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CPE cpe = (CPE) o;
+        return Objects.equals(cpeNameId, cpe.cpeNameId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cpeNameId);
     }
 }

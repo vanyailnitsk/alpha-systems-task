@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -35,7 +36,7 @@ public class CpeService {
         cpeRepository.save(cpe);
     }
     public void createCpe(List<CPE> cpeList) {
-        cpeRepository.saveAll(cpeList);
+        cpeRepository.saveAllAndFlush(cpeList);
     }
     public void init() {
         String uri = "https://services.nvd.nist.gov/rest/json/cpes/2.0?resultsPerPage=10000&startIndex={index}";
@@ -62,8 +63,8 @@ public class CpeService {
                 );
                 ResultSet resultSet = response.getBody();
                 cpeList.addAll(resultSet.getProducts());
+                //createCpe(resultSet.getProducts());
                 System.out.println(cpeList.size()+"/"+totalResults+" rows readed");
-                break;
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
                 break;

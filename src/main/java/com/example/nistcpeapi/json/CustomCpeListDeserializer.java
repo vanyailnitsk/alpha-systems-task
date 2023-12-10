@@ -7,10 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
 
@@ -41,8 +38,8 @@ public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
         }
         return cpeList;
     }
-    private List<CPE> parseDeprecatedBy(JsonNode node) {
-        List<CPE> deprecatedByList = new ArrayList<>();
+    private Set<CPE> parseDeprecatedBy(JsonNode node) {
+        Set<CPE> deprecatedByList = new HashSet<>();
         JsonNode deprecatedByNode = node.path("deprecatedBy");
         if (deprecatedByNode.isArray()) {
             for (JsonNode itemNode : deprecatedByNode) {
@@ -50,12 +47,16 @@ public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
                 deprecatedBy.setCpeName(itemNode.path("cpeName").asText());
                 deprecatedBy.setCpeNameId(UUID.fromString(itemNode.path("cpeNameId").asText()));
                 deprecatedByList.add(deprecatedBy);
+                if (deprecatedBy.getCpeNameId().equals(UUID.fromString("BB60A0E4-B292-495C-8A06-2F0CC2A76620"))) {
+                    System.out.println(deprecatedBy);
+                    System.out.println(deprecatedByList);
+                }
             }
         }
         return deprecatedByList;
     }
-    private List<CPE> parseDeprecates(JsonNode node) {
-        List<CPE> deprecatesList = new ArrayList<>();
+    private Set<CPE> parseDeprecates(JsonNode node) {
+        Set<CPE> deprecatesList = new HashSet<>();
         JsonNode deprecatesNode = node.path("deprecates");
         if (deprecatesNode.isArray()) {
             Iterator<JsonNode> elements = deprecatesNode.elements();

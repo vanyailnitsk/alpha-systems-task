@@ -29,6 +29,8 @@ public class ResultSet {
     @JsonDeserialize(using = CustomCpeListDeserializer.class)
     private List<CPE> products;
     public ResultSet(Page<CPE> page) {
-
+        this.resultsPerPage = page.getNumberOfElements();
+        this.startIndex = page.getPageable().getPageNumber();
+        this.products = page.getContent();
     }
 }
