@@ -47,10 +47,6 @@ public class CustomCpeListDeserializer extends StdDeserializer<List<CPE>> {
                 deprecatedBy.setCpeName(itemNode.path("cpeName").asText());
                 deprecatedBy.setCpeNameId(UUID.fromString(itemNode.path("cpeNameId").asText()));
                 deprecatedByList.add(deprecatedBy);
-                if (deprecatedBy.getCpeNameId().equals(UUID.fromString("BB60A0E4-B292-495C-8A06-2F0CC2A76620"))) {
-                    System.out.println(deprecatedBy);
-                    System.out.println(deprecatedByList);
-                }
             }
         }
         return deprecatedByList;

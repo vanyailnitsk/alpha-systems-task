@@ -61,19 +61,19 @@ public class CpeService {
                 );
                 ResultSet resultSet = response.getBody();
                 cpeList.addAll(resultSet.getProducts());
-                System.out.println(cpeList.size()+"/"+totalResults+" rows readed");
+//                createCpe(resultSet.getProducts());
+                log.info("{}/{} rows read from Nist CPE API",resultSet.getProducts().size()+i,totalResults);
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
-                break;
             }
         }
+        log.info("Copying to local Database...");
         createCpe(cpeList);
         long timeDiff = System.currentTimeMillis()-start;
-        System.out.println("Database completed in "+timeDiff/1000+" seconds");
+        log.info("Database completed in {} seconds!",timeDiff/1000);
     }
     public void dailyUpdate() {
-        String uri =
-                "https://services.nvd.nist.gov/rest/json/cpes/2.0/";
+        String uri = "https://services.nvd.nist.gov/rest/json/cpes/2.0/";
         HttpHeaders headers = new HttpHeaders();
         headers.set("apiKey", apiKey);
         HttpEntity<?> entity = new HttpEntity<>(headers);

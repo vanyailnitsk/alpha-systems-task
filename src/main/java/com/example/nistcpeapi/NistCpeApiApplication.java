@@ -16,12 +16,6 @@ public class NistCpeApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(NistCpeApiApplication.class, args);
 	}
-	@Bean
-	CommandLineRunner commandLineRunner () {
-		return args -> {
-			cpeService.dailyUpdate();
-			cpeService.init();
-		};
-	}
+
 
 }

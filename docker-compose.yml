@@ -1,0 +1,25 @@
+services:
+  db:
+    container_name : postgres_container
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - 5432:5432
+  spring-app:
+    container_name: spring-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      db-url: jdbc:postgresql://db:5432/nist_cpe
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db/nist_cpe
+      port: 8081
+    ports:
+      - 8081:8081
+    depends_on:
+      - db
